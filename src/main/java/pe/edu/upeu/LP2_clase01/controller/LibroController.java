@@ -16,73 +16,81 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import pe.edu.upeu.LP2_clase01.entity.Categoria;
-import pe.edu.upeu.LP2_clase01.service.CategoriaService;
+import pe.edu.upeu.LP2_clase01.entity.Libro;
+import pe.edu.upeu.LP2_clase01.service.LibroService;
+
 
 @RestController
-@RequestMapping("/categorias")
-public class CategoriaController {
+@RequestMapping("/libros")
+public class LibroController {
 
 	@Autowired
-	private CategoriaService categoriaService;
-	
+	private LibroService libroService;
+
 	@GetMapping
-	public ResponseEntity<List<Categoria>> readAll(){
+	public ResponseEntity<List<Libro>> readAll() {
 		try {
-			List<Categoria> categorias = categoriaService.readAll();
-			if(categorias.isEmpty()) {
+			List<Libro> Libros = libroService.readAll();
+			if (Libros.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
-			return new ResponseEntity<>(categorias, HttpStatus.OK);
+			return new ResponseEntity<>(Libros, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
+
 	@PostMapping
-	public ResponseEntity<Categoria> crear(@Valid @RequestBody Categoria cat){
+	public ResponseEntity<Libro> crear(@Valid @RequestBody Libro lib) {
 		try {
-			Categoria c = categoriaService.create(cat);
+			Libro c = libroService.create(lib);
 			return new ResponseEntity<>(c, HttpStatus.CREATED);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Categoria> getCategoriaId(@PathVariable("id") Long id){
+	public ResponseEntity<?> getLibroId(@PathVariable("id") Long id) {
 		try {
-			Categoria c = categoriaService.read(id).get();
-			return new ResponseEntity<>(c, HttpStatus.CREATED);
+			Optional<Libro> c = libroService.read(id);
+			if (c.isEmpty()) {
+				return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(c, HttpStatus.OK);
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Categoria> delCategoria(@PathVariable("id") Long id){
+	public ResponseEntity<Libro> delLibro(@PathVariable("id") Long id) {
 		try {
-			categoriaService.delete(id);
+			libroService.delete(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-	}
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updateCategoria(@PathVariable("id") Long id, @Valid @RequestBody Categoria cat){
 
-			Optional<Categoria> c = categoriaService.read(id);
-			if(c.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-				
-			}else {
-				return new ResponseEntity<>(categoriaService.update(cat), HttpStatus.OK);
-			}		
-		
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateLibro(@PathVariable("id") Long id, @Valid @RequestBody Libro lib) {
+
+		Optional<Libro> c = libroService.read(id);
+		if (c.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(libroService.update(lib), HttpStatus.OK);
+		}
+
 	}
 }

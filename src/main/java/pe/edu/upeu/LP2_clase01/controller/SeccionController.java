@@ -25,12 +25,12 @@ public class SeccionController {
 
 	@Autowired
 	private SeccionService seccionService;
-	
+
 	@GetMapping
-	public ResponseEntity<List<Seccion>> readAll(){
+	public ResponseEntity<List<Seccion>> readAll() {
 		try {
 			List<Seccion> Seccions = seccionService.readAll();
-			if(Seccions.isEmpty()) {
+			if (Seccions.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 			return new ResponseEntity<>(Seccions, HttpStatus.OK);
@@ -38,10 +38,11 @@ public class SeccionController {
 			// TODO: handle exception
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
+
 	@PostMapping
-	public ResponseEntity<Seccion> crear(@Valid @RequestBody Seccion cat){
+	public ResponseEntity<Seccion> crear(@Valid @RequestBody Seccion cat) {
 		try {
 			Seccion c = seccionService.create(cat);
 			return new ResponseEntity<>(c, HttpStatus.CREATED);
@@ -49,25 +50,27 @@ public class SeccionController {
 			// TODO: handle exception
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
+
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getSeccionId(@PathVariable("id") Long id){
+	public ResponseEntity<?> getSeccionId(@PathVariable("id") Long id) {
 		try {
 			Optional<Seccion> c = seccionService.read(id);
-			if(c.isEmpty()) {
+			if (c.isEmpty()) {
 				return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 			}
 			return new ResponseEntity<>(c, HttpStatus.OK);
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Seccion> delSeccion(@PathVariable("id") Long id){
+	public ResponseEntity<Seccion> delSeccion(@PathVariable("id") Long id) {
 		try {
 			seccionService.delete(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -75,17 +78,18 @@ public class SeccionController {
 			// TODO: handle exception
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-	}
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updateSeccion(@PathVariable("id") Long id, @Valid @RequestBody Seccion cat){
 
-			Optional<Seccion> c = seccionService.read(id);
-			if(c.isEmpty()) {
-				return new ResponseEntity<>(seccionService.update(cat), HttpStatus.OK);
-			}else {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}		
-		
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateSeccion(@PathVariable("id") Long id, @Valid @RequestBody Seccion cat) {
+
+		Optional<Seccion> c = seccionService.read(id);
+		if (c.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(seccionService.update(cat), HttpStatus.OK);
+		}
+
 	}
 }
